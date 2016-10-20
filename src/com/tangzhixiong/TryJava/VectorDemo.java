@@ -1,4 +1,4 @@
-package com.tangzhixiong;
+package com.tangzhixiong.TryJava;
 
 import java.io.IOException;
 import java.util.Enumeration;

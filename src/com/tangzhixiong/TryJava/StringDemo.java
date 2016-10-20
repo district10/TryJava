@@ -1,4 +1,4 @@
-package com.tangzhixiong;
+package com.tangzhixiong.TryJava;
 
 import java.util.StringJoiner;
 

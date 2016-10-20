@@ -1,4 +1,4 @@
-package com.tangzhixiong;
+package com.tangzhixiong.TryJava;
 
 public class Main {
 

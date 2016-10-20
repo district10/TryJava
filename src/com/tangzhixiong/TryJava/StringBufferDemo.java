@@ -1,8 +1,9 @@
-package com.tangzhixiong;
+package com.tangzhixiong.TryJava;
 
 /**
  * Created by tzx on 2016/10/18.
  */
+
 public class StringBufferDemo {
     public static void main(String args[]) {
         StringBuffer sb = new StringBuffer();
