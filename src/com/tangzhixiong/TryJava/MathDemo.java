@@ -5,6 +5,8 @@ package com.tangzhixiong.TryJava;
  */
 public class MathDemo {
     public static void main(String[] args) {
+        // java.lang.Math 在 java.lang 下面，不用 import
+
         /*---------下面是三角运算---------*/
         // 将弧度转换角度
         System.out.println("Math.toDegrees(1.57)："+Math.toDegrees(1.57));
