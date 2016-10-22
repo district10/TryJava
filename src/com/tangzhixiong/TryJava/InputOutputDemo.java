@@ -1,6 +1,7 @@
 package com.tangzhixiong.TryJava;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -19,10 +20,54 @@ public class InputOutputDemo {
         // testSetInSetOut();
         // testGetErrorStream();
         // testGetOutpurStream(); // BUGGY
+        // testRandomAccessFile();
+        testWriteObject();
+    }
+    public static void testWriteObject() {
+        try (
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("README.md.bak"));
+        ) {
+            Person per = new Person("孙悟空", 500);
+            oos.writeObject(per);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("README.md.bak"));
+        ) {
+            Person p = (Person)ois.readObject();
+            System.out.println("名字为：" + p.getName() + "\n年龄为：" + p.getAge());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void testRandomAccessFile() {
-
+        try (
+                RandomAccessFile raf = new RandomAccessFile("README.md" , "r");
+                RandomAccessFile out = new RandomAccessFile("README.md.bak" , "rw");
+        ) {
+            out.seek(out.length());
+            out.write("追加的内容！\r\n".getBytes());
+            // 获取 RandomAccessFile 对象文件指针的位置，初始位置是0
+            System.out.println("RandomAccessFile 的文件指针的初始位置：" + raf.getFilePointer());
+            // 移动 raf 的文件记录指针的位置
+            raf.seek(20);
+            byte[] bbuf = new byte[1024];
+            int hasRead = 0;
+            while ((hasRead = raf.read(bbuf)) > 0) {
+                System.out.print(new String(bbuf , 0 , hasRead ));
+                // out.write(bbuf);                                 // 有乱码
+                // out.write(bbuf.toString().getBytes());           // 不能有效输出
+                out.write(new String(bbuf,0,hasRead).getBytes());
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void testGetOutpurStream() {
@@ -251,4 +296,54 @@ public class InputOutputDemo {
         }
         System.out.println();
     }
+}
+
+class Person implements java.io.Serializable {
+    private String name;
+    private int age;
+    // private Person() {}              // 即使没有这一行，new Person() 也是不能用的
+    public Person(String name , int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return this.name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public int getAge() {
+        return this.age;
+    }
+
+    // 自定义 readObject 和 writeObject（一点加密）
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        // 将 name 实例变量的值反转后写入二进制流
+        out.writeObject(new StringBuffer(name).reverse());
+        out.writeInt(age);
+    }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        // 将读取的字符串反转后赋给 name 实例变量
+        this.name = ((StringBuffer)in.readObject()).reverse().toString();
+        this.age = in.readInt();
+    }
+
+    /*
+    // 重写 writeReplace 方法，程序在序列化该对象之前，
+    // 先调用该方法，【转而】序列化对象
+    private Object writeReplace()throws ObjectStreamException {
+        System.out.println("Write replace.");
+        ArrayList<Object> list = new ArrayList<>();
+        list.add(name);
+        list.add(age);
+        return list;
+    }
+    // 使用方法：
+    //      System.out.println((ArrayList)ois.readObject());
+    */
 }
