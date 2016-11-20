@@ -1,8 +1,13 @@
 package com.tangzhixiong.TryJava;
 
 public class Main {
+    private static int nice;
 
     public static void main(String[] args) {
-	// write your code here
+        int i;
+    }
+
+    public static void main(int i) {
+        nice = i;
     }
 }

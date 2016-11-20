@@ -9,7 +9,7 @@ import java.util.Scanner;
  * Created by tzx on 2016/10/21.
  */
 public class EchoDemo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try(
                 Scanner sc = new Scanner(System.in);
                 PrintStream ps = new PrintStream(new FileOutputStream("README.md.bak"))
@@ -19,8 +19,10 @@ public class EchoDemo {
                 ps.println("键盘输入的内容是：" + sc.next());
             }
         }
+        /*
         catch(IOException e) {
             e.printStackTrace();
         }
+        */
     }
 }
